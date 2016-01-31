@@ -2,38 +2,114 @@ local players = {}
 
 player = {}
 
+player.load = function()
+  idleAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = 16,
+      cellSwapTime = 0.15
+    }
+  )
+end
+
+player.handleJoystickPressed = function( joystick )
+  for i, playerInstance in pairs(players) do
+    if playerInstance.joystick == joystick then
+      if joystick:isGamepadDown('a') then
+        local vx, vy = playerInstance.body:getLinearVelocity()
+        if math.abs(vy) > 0.01 and playerInstance.hasDoubleJump then
+          playerInstance.hasDoubleJump = false
+        elseif math.abs(vy) > 0.01 then
+          return
+        end
+        playerInstance.body:setLinearVelocity( vx, playerInstance.speed.y )
+      elseif joystick:isGamepadDown('b') then
+        if playerInstance.attachedBody ~= nil then
+          playerInstance.attachedBody:setPosition( playerInstance.body:getX() + playerInstance.forward * 10, playerInstance.body:getY() )
+          playerInstance.attachedBody:setActive( true )
+          local vx, vy = playerInstance.body:getLinearVelocity()
+          playerInstance.body:setLinearVelocity( playerInstance.forward * vx * 2, 0 )
+          playerInstance.attachedBody = nil
+        else
+          for i, contact in pairs(playerInstance.body:getContactList()) do
+            local a, b = contact:getFixtures()
+            if b:getUserData().colliderType == "collectable" then
+              local other = b:getUserData().instance
+              other.body:setActive( false )
+              playerInstance.attachedBody = other.body
+              break
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
 player.handleJoystickInput = function(playerInstance, dt)
 	local axisX = playerInstance.joystick:getAxis( 1 )
-	local axisY = playerInstance.joystick:getAxis( 2 )
 	
-	playerInstance.position.x = playerInstance.position.x + axisX * dt * playerInstance.speed.x
-	playerInstance.position.y = playerInstance.position.y + axisY * dt * playerInstance.speed.y
+  if math.abs( axisX ) > 0.1 then
+    local x, y = playerInstance.body:getLinearVelocity()
+    playerInstance.body:setLinearVelocity( axisX * playerInstance.speed.x, y )
+  else
+    local x, y = playerInstance.body:getLinearVelocity()
+    playerInstance.body:setLinearVelocity( 0, y )
+  end
 end
 
-player.newPlayer = function( position, speed, color, joystick )
+player.newPlayer = function( position, speed, playerIndex )
 	local instance = { 
-		position = position,
 		speed = speed,
-		color = color,
-		joystick = joystick
+		joystick = love.joystick.getJoysticks()[ playerIndex ],
+    body = love.physics.newBody( world.physicsWorld, position.x, position.y, "dynamic" ),
+    forward = 0,
+    playerIndex = playerIndex,
+    currentAnimation = idleAnimation
 	}
+  
+  local playerPhysics = {}
+  playerPhysics.body = instance.body
+  playerPhysics.body:setFixedRotation( true )
+  playerPhysics.shape = love.physics.newRectangleShape( instance.currentAnimation:getCellDimensions() )
+  playerPhysics.fixture = love.physics.newFixture( playerPhysics.body, playerPhysics.shape, 1 )
+  playerPhysics.fixture:setUserData( { colliderType = "player", instance = instance } )
+  world.objects.player = playerPhysics
+  
 	table.insert( players, instance )
-end
-
-player.load = function()
-	playerSprite = love.graphics.newImage("assets/images/player.png")
 end
 
 player.update = function(dt)
 	local joysticks = love.joystick.getJoysticks()
-	for k, playerInstance in pairs(players) do
+	for i, playerInstance in pairs(players) do
+    
 		player.handleJoystickInput( playerInstance, dt )
+    local vx, vy = playerInstance.body:getLinearVelocity()
+    
+    if vx > 0.01 then
+      playerInstance.forward = 1 
+    elseif vx < -0.01 then
+      playerInstance.forward = -1 
+    else
+      playerInstance.forward = 0
+    end
+
+    if vy == 0 then
+      playerInstance.hasDoubleJump = true
+    end
+    
+    if playerInstance.attachedBody ~= nil then
+      playerInstance.attachedBody:setPosition( playerInstance.body:getX() + playerInstance.forward * 10, playerInstance.body:getY(), 0 )
+    end
+    
+    playerInstance.currentAnimation:update( dt )
+    
 	end
 end
 
 player.draw = function()
-	for k, playerInstance in pairs(players) do
-		love.graphics.setColor( playerInstance.color )
-		love.graphics.draw( playerSprite, playerInstance.position.x, playerInstance.position.y )--, 1, 1, playerSprite:getWidth() / 2, playerSprite:getHeight() / 2 )
+	for i, playerInstance in pairs(players) do
+    local playerWidth, playerHeight = playerInstance.currentAnimation:getCellDimensions()
+		playerInstance.currentAnimation:draw( { x = playerInstance.body:getX() - playerWidth / 2, y = playerInstance.body:getY() - playerHeight / 2 } )
 	end
 end

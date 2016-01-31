@@ -1,15 +1,32 @@
+require "assets/scripts/world"
 require "assets/scripts/player"
+require "assets/scripts/collectable"
+require "assets/scripts/ui"
+require "assets/scripts/animation"
 
-function love.load() 
+function love.load()
+  love.window.setMode( 1024, 800 )
+  
+  world:load()
 	player.load()
-	player.newPlayer( { x = 100, y = 100 }, { x = 100, y = 100 }, { 255, 0, 0, 100 }, love.joystick.getJoysticks()[1] )
-	player.newPlayer( { x = 200, y = 100 }, { x = 100, y = 100 }, { 0, 255, 0, 100 }, love.joystick.getJoysticks()[2] )
+  collectable.load()
+  
+	player.newPlayer( { x = 100, y = 100 }, { x = 300, y = -500 }, 1 )
+	player.newPlayer( { x = 800, y = 100 }, { x = 300, y = -500 }, 2 )
 end
 
 function love.update( dt )
 	player.update(dt)
+  collectable.update(dt)
+  world:update(dt)
+end
+
+function love.joystickpressed(joystick,button)
+  player.handleJoystickPressed( joystick )
 end
 
 function love.draw()
+  world:draw()
 	player.draw()
+  collectable.draw()
 end
