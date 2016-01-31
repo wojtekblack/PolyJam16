@@ -28,7 +28,7 @@ function world:load()
     wall.body = love.physics.newBody( physicsWorld, i * love.graphics.getWidth(), love.graphics.getHeight() / 2, "static" )
     wall.shape = love.physics.newRectangleShape( 10 , love.graphics.getHeight() )
     wall.fixture = love.physics.newFixture( wall.body, wall.shape, 1 )
-    wall.fixture:setFriction( 100 )
+    wall.fixture:setFriction( 0 )
     table.insert( objects, wall )
   end
   
@@ -45,6 +45,7 @@ function world:load()
     plaformCollider.body = love.physics.newBody( physicsWorld, platform.x, platform.y, "static" )
     plaformCollider.shape = love.physics.newRectangleShape( love.graphics.getWidth() / 5, love.graphics.getHeight() / 40 )
     plaformCollider.fixture = love.physics.newFixture( plaformCollider.body, plaformCollider.shape, 1 )
+    plaformCollider.fixture:setFriction( 0 )
     table.insert( objects, plaformCollider )
   end
   
