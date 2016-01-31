@@ -39,10 +39,10 @@ function world:load()
   
   local platforms = {
     platform1 = { x = love.graphics.getWidth() / 6, y = love.graphics.getHeight() / 16 * 3 },
-    platform2 = { x = love.graphics.getWidth() / 6, y = love.graphics.getHeight() / 16 * 7 },
+    platform2 = { x = love.graphics.getWidth() / 6, y = love.graphics.getHeight() / 16 * 6 },
     platform3 = { x = love.graphics.getWidth() / 6 * 3, y = love.graphics.getHeight() / 16 * 5 },
     platform4 = { x = love.graphics.getWidth() / 6 * 5, y = love.graphics.getHeight() / 16 * 3 },
-    platform5 = { x = love.graphics.getWidth() / 6 * 5, y = love.graphics.getHeight() / 16 * 7 }
+    platform5 = { x = love.graphics.getWidth() / 6 * 5, y = love.graphics.getHeight() / 16 * 6 }
   }
   
   for i, platform in pairs(platforms) do
