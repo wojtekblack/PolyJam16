@@ -19,7 +19,6 @@ function love.load()
   loopStartSound = love.sound.newSoundData( "assets/sounds/LoopStart.wav" )
   loopStartSource = love.audio.newSource( loopStartSound, "stream" )
   love.audio.play( loopStartSource )
-  love.audio.
 end
 
 function love.update( dt )

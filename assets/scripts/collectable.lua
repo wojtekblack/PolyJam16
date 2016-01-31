@@ -4,15 +4,15 @@ collectablesSprites = {}
 collectable = {}
 collectable.spawnInterval = 2.0
 quads = {}
-width = 20
-height = 20
-
+width = 25
+height = width
+spriteSize = {}
 
 collectable.load = function()
   path = "assets/images/symbols.png"
   collectablesSprites = love.graphics.newImage( path )
   collectable.lastTime = love.timer.getTime()
-  local spriteSize = collectablesSprites:getHeight() / 2
+  spriteSize = collectablesSprites:getHeight() / 2
   for i = 0, 4, 1 do
     table.insert( quads, i, love.graphics.newQuad( math.floor( i / 2 - 0.1 ) * spriteSize, math.fmod(i, 2) * spriteSize , spriteSize, spriteSize, collectablesSprites:getDimensions() ) )
   end
@@ -38,7 +38,6 @@ collectable.update = function(dt)
     collectablePhysics.shape = love.physics.newRectangleShape( width, height )
     collectablePhysics.fixture = love.physics.newFixture( collectablePhysics.body, collectablePhysics.shape, 1 )
     collectablePhysics.fixture:setUserData( { colliderType = "collectable", instance = instance } )
-    table.insert( world.objects, collectablePhysics )
     table.insert( collectables, instance )
     collectable.lastTime = currentTime
   end
@@ -46,6 +45,9 @@ end
 
 collectable.draw = function()
   for i, collectableInstance in pairs(collectables) do
-    love.graphics.draw( collectablesSprites, quads[ collectableInstance.type ], collectableInstance.body:getX(), collectableInstance.body:getY() )
+    if not collectableInstance.body:isDestroyed() then
+    love.graphics.draw( collectablesSprites, quads[ collectableInstance.type ], 
+      collectableInstance.body:getX() - width/2, collectableInstance.body:getY()-height/2, 0, width/spriteSize, height/spriteSize )
+    end
   end
 end
