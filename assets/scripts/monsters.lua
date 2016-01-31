@@ -30,6 +30,8 @@ function monsters:load()
     table.insert( monsterSounds, monsterSound )
   end
   
+  deathSound = love.audio.newSource( "assets/sounds/FX/Death.wav", "static" )
+  
 end
 
 function monsters:draw()
@@ -69,6 +71,7 @@ shockAmpY = 5
 
 function monsters:endgame( winerIndex )
   monsterBalance = 0;
+  love.audio.play( deathSound )
 end
 
 function monsters:update(dt)
@@ -85,7 +88,7 @@ function monsters:update(dt)
   
   if monsterBalance > 250 or monsterBalance < -250 then
     musicManager:requestPlay( "cross", false )
-    musicManager:requestPlay( "loopEnd", false )
+    musicManager:requestPlay( "loopEnd", true )
   end
     
   

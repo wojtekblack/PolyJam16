@@ -35,8 +35,8 @@ player.load = function()
   end
 
   -- animation initialization
-  local cellScale = { 1.5, 1.5 }
-  local cellLeftScale = { -1.5, 1.5 }
+  local cellScale = { 2, 2 }
+  local cellLeftScale = { -2, 2 }
   local cellSwapTime = 0.15
   local cellWidth = 16
   hangAnimation = newAnimation(
@@ -67,8 +67,8 @@ player.load = function()
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
       cellScale = cellScale,
-      from = 5,
-      to = 5
+      from = 6,
+      to = 6
     }
   )
   
@@ -78,8 +78,8 @@ player.load = function()
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
       cellScale = cellScale,
-      from = 6,
-      to = 6
+      from = 5,
+      to = 5
     }
   )
   
