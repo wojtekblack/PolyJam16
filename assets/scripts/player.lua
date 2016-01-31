@@ -60,7 +60,7 @@ player.load = function()
       to = 4
     }
   )
-  
+
   idleFallAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
@@ -72,7 +72,7 @@ player.load = function()
     }
   )
   
-  idleJumpAnimation = newAnimation( 
+  idleJumpAnimation = newAnimation(
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -83,18 +83,7 @@ player.load = function()
     }
   )
   
-  moveJumpRightAnimation = newAnimation( 
-    "assets/images/playerIdle.png",
-    { 
-      cellWidth = cellWidth,
-      cellSwapTime = cellSwapTime,
-      cellScale = cellScale,
-      from = 7,
-      to = 7
-    }
-  )
-  
-  moveFallRightAnimation = newAnimation( 
+  moveJumpRightAnimation = newAnimation(
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -105,18 +94,18 @@ player.load = function()
     }
   )
   
-  moveJumpLeftAnimation = newAnimation( 
+  moveFallRightAnimation = newAnimation(
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
-      cellScale = cellLeftScale,
+      cellScale = cellScale,
       from = 7,
       to = 7
     }
   )
   
-  moveFallLeftAnimation = newAnimation( 
+  moveJumpLeftAnimation = newAnimation(
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -127,7 +116,18 @@ player.load = function()
     }
   )
   
-  moveRightAnimation = newAnimation( 
+  moveFallLeftAnimation = newAnimation(
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellLeftScale,
+      from = 7,
+      to = 7
+    }
+  )
+  
+  moveRightAnimation = newAnimation(
     "assets/images/playerIdle.png",
     {
       cellWidth = cellWidth,
@@ -174,6 +174,7 @@ player.handleJump = function( playerInstance )
     return
   end
   playerInstance.body:setLinearVelocity( vx, playerInstance.speed.y )
+  love.audio.play( jumpSounds[ love.math.random( 1, #jumpSounds ) ] )
 end
 
 player.handleGrabThrow = function( playerInstance )
@@ -190,6 +191,8 @@ player.handleGrabThrow = function( playerInstance )
         local other = b:getUserData().instance
         other.body:setActive( false )
         playerInstance.attachedBody = other.body
+        love.audio.play( pickupSounds[ love.math.random( 1, #pickupSounds ) ] )
+        love.audio.play( tauntSounds[ love.math.random( 1, #tauntSounds ) ] )
         break
       end
     end
@@ -251,7 +254,8 @@ player.newPlayer = function( position, speed, playerIndex )
     body = love.physics.newBody( world.physicsWorld, position.x, position.y, "dynamic" ),
     forward = 0,
     playerIndex = playerIndex,
-    currentAnimation = idleAnimation
+    currentAnimation = idleAnimation,
+    lastVY = 0
 	}
   
   local playerPhysics = {}
@@ -279,9 +283,11 @@ player.update = function(dt)
       playerInstance.forward = 0
     end
 
-    if vy == 0 then
+    if math.abs( vy ) < 0.01 and math.abs( playerInstance.lastVY ) >= 0.01 then
       playerInstance.hasDoubleJump = true
+      love.audio.play( landingSounds[ love.math.random( 1, #landingSounds ) ] )
     end
+    playerInstance.lastVY = vy
     
     if playerInstance.attachedBody ~= nil then
       playerInstance.attachedBody:setPosition( playerInstance.body:getX() + playerInstance.forward * 10, playerInstance.body:getY(), 0 )
@@ -308,6 +314,9 @@ player.update = function(dt)
     end
     
     playerInstance.currentAnimation:update( dt )
+    if playerInstance.currentAnimation == moveLeftAnimation or playerInstance.currentAnimation == moveRightAnimation then
+      love.audio.play( stepSounds[ love.math.random( 1, #stepSounds ) ] )
+    end
     
 	end
 end
