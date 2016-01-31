@@ -8,7 +8,7 @@ player.load = function()
     { 
       cellWidth = 16,
       cellSwapTime = 0.15,
-      cellScale = { 2, 2 }
+      cellScale = { 1.5, 1.5 }
     }
   )
   

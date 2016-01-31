@@ -13,6 +13,11 @@ function love.load()
   
 	player.newPlayer( { x = 100, y = 100 }, { x = 300, y = -500 }, 1 )
 	player.newPlayer( { x = 800, y = 100 }, { x = 300, y = -500 }, 2 )
+  
+  loopStartSound = love.sound.newSoundData( "assets/sounds/LoopStart.wav" )
+  loopStartSource = love.audio.newSource( loopStartSound, "stream" )
+  love.audio.play( loopStartSource )
+  love.audio.
 end
 
 function love.update( dt )
