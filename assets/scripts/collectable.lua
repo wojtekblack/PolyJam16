@@ -2,19 +2,20 @@ collectables = {}
 collectablesSprites = {}
 
 collectable = {}
-
 collectable.spawnInterval = 2.0
+quads = {}
+width = 20
+height = 20
+
 
 collectable.load = function()
-  spritesPaths = {
-    sprite1 = "assets/images/collectable1.png"
-  }
-  
-  for i, path in pairs(spritesPaths) do
-    table.insert( collectablesSprites, love.graphics.newImage( path ) )
-  end
-  
+  path = "assets/images/symbols.png"
+  collectablesSprites = love.graphics.newImage( path )
   collectable.lastTime = love.timer.getTime()
+  local spriteSize = collectablesSprites:getHeight() / 2
+  for i = 0, 4, 1 do
+    table.insert( quads, i, love.graphics.newQuad( math.floor( i / 2 - 0.1 ) * spriteSize, math.fmod(i, 2) * spriteSize , spriteSize, spriteSize, collectablesSprites:getDimensions() ) )
+  end
 end
 
 collectable.update = function(dt)
@@ -25,30 +26,26 @@ collectable.update = function(dt)
       y = love.math.random( love.graphics.getHeight() / 10, love.graphics.getHeight() / 10 * 5 )
     }
     
-    local collectableSprite = collectablesSprites[ math.floor( love.math.random( 1, #collectablesSprites ) ) ]
-    
     local collectablePhysics = {}
     
     local instance = {
       body = love.physics.newBody( world.physicsWorld, position.x, position.y, "dynamic" ),
-      sprite = collectableSprite,
-      object = collectablePhysics
+      type = love.math.random( 4 )
     }
     
     collectablePhysics.body = instance.body
     collectablePhysics.body:setFixedRotation( true )
-    collectablePhysics.shape = love.physics.newRectangleShape( collectableSprite:getWidth(), collectableSprite:getHeight() )
+    collectablePhysics.shape = love.physics.newRectangleShape( width, height )
     collectablePhysics.fixture = love.physics.newFixture( collectablePhysics.body, collectablePhysics.shape, 1 )
-    collectablePhysics.fixture:setUserData( { colliderType = "collectable", instance = instance, type = 1 } )
+    collectablePhysics.fixture:setUserData( { colliderType = "collectable", instance = instance } )
     table.insert( world.objects, collectablePhysics )
+    table.insert( collectables, instance )
     collectable.lastTime = currentTime
   end
 end
 
 collectable.draw = function()
   for i, collectableInstance in pairs(collectables) do
-    love.graphics.draw( collectableInstance.sprite, 
-      collectableInstance.body:getX() - collectableInstance.sprite.getWidth() / 2,
-      collectableInstance.body:getY() - collectableInstance.sprite.getHeight() / 2 )
+    love.graphics.draw( collectablesSprites, quads[ collectableInstance.type ], collectableInstance.body:getX(), collectableInstance.body:getY() )
   end
 end
