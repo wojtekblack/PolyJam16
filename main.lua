@@ -25,6 +25,10 @@ function love.joystickpressed(joystick,button)
   player.handleJoystickPressed( joystick )
 end
 
+function love.keypressed(key, scancode, isRepeat)
+  player.handleKeyboardPressed( key, scancode, isRepeat )
+end
+
 function love.draw()
   world:draw()
 	player.draw()
