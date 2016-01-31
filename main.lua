@@ -40,5 +40,4 @@ function love.draw()
   world:draw()
 	player.draw()
   collectable.draw()
-  monsters.draw()
 end

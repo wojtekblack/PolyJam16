@@ -1,3 +1,5 @@
+require "assets/scripts/monsters"
+
 world = {}
 
 function world:load()
@@ -91,6 +93,7 @@ end
 
 function world:draw()
   love.graphics.draw( self.background, 0, 0, 0, love.graphics.getWidth() / self.bgWidth, love.graphics.getHeight() / self.bgHeight )
+  monsters.draw()
   love.graphics.draw( self.bgFilter, 0, 0, 0, love.graphics.getWidth() / self.bgWidth, love.graphics.getHeight() / self.bgHeight )
   
   local r, g, b, a = love.graphics.getColor()
