@@ -4,6 +4,7 @@ require "assets/scripts/collectable"
 require "assets/scripts/ui"
 require "assets/scripts/animation"
 require "assets/scripts/monsters"
+require "assets/scripts/musicManager"
 
 function love.load()
   love.window.setMode( 1024, 800 )
@@ -12,13 +13,10 @@ function love.load()
 	player.load()
   collectable.load()
   monsters.load()
+  musicManager:load()
   
 	player.newPlayer( { x = 100, y = 100 }, { x = 300, y = -500 }, 1 )
 	player.newPlayer( { x = 800, y = 100 }, { x = 300, y = -500 }, 2 )
-  
-  loopStartSound = love.sound.newSoundData( "assets/sounds/LoopStart.wav" )
-  loopStartSource = love.audio.newSource( loopStartSound, "stream" )
-  love.audio.play( loopStartSource )
 end
 
 function love.update( dt )
@@ -26,6 +24,7 @@ function love.update( dt )
   collectable.update(dt)
   world:update(dt)
   monsters:update(dt)
+  musicManager:update(dt)
 end
 
 function love.joystickpressed(joystick,button)
