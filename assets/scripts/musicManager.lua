@@ -18,7 +18,7 @@ function musicManager:load()
     table.insert( self.musicSources, { nameFilePair[1], newSoundSource } )
   end
   
-  --self:requestPlay( "loopStart", true )
+  self:requestPlay( "loopStart", true )
 
 end
 

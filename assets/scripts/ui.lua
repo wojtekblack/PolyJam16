@@ -16,7 +16,7 @@ ui.addNeutralCollectible = function( collectibleType )
 end
 
 ui.addCollectible = function( collectibleType, playerIndex )
-  if playerIndex == 0 and collectibleType == type1 then
+  if playerIndex == 2 and collectibleType == type1 then
     monsters:hit1()
   elseif playerIndex == 1 and collectibleType == type2 then
     monsters:hit2()

@@ -235,7 +235,7 @@ end
 player.handleInput = function(playerInstance, dt)
   local axisX = 0
   if playerInstance.joystick ~= nil then
-    axisX = playerInstance.joystick:getAxis( 1 )
+    axisX = playerInstance.joystick:getAxis( 2 )
   else
     if love.keyboard.isDown( keyboardInputMapping[ playerInstance.playerIndex ].left ) then
       axisX = -1
@@ -264,7 +264,7 @@ player.newPlayer = function( position, speed, playerIndex )
   playerPhysics.shape = love.physics.newRectangleShape( instance.currentAnimation:getCellDimensions() )
   playerPhysics.fixture = love.physics.newFixture( playerPhysics.body, playerPhysics.shape, 1 )
   playerPhysics.fixture:setUserData( { colliderType = "player", instance = instance } )
-  world.objects.player = playerPhysics
+  --world.objects.player = playerPhysics
   
 	table.insert( players, instance )
 end
