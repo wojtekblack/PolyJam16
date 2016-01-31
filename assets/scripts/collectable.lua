@@ -14,7 +14,7 @@ collectable.load = function()
   collectable.lastTime = love.timer.getTime()
   local spriteSize = collectablesSprites:getHeight() / 2
   for i = 0, 4, 1 do
-    table.insert( quads, i, love.graphics.newQuad( i / 2 * spriteSize, math.fmod(i, 2) * spriteSize , spriteSize, spriteSize, collectablesSprites:getDimensions() ) )
+    table.insert( quads, i, love.graphics.newQuad( math.floor( i / 2 - 0.1 ) * spriteSize, math.fmod(i, 2) * spriteSize , spriteSize, spriteSize, collectablesSprites:getDimensions() ) )
   end
 end
 
