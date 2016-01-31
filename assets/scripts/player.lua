@@ -4,16 +4,17 @@ player = {}
 
 player.load = function()
   local cellScale = { 1.5, 1.5 }
+  local cellLeftScale = { -1.5, 1.5 }
   local cellSwapTime = 0.15
   local cellWidth = 16
   hangAnimation = newAnimation(
     "assets/images/playerIdle.png",
-    { 
+    {
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
       cellScale = cellScale,
-      from = 1,
-      to = 1
+      from = 0,
+      to = 0
     }
   )
   
@@ -23,12 +24,23 @@ player.load = function()
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
       cellScale = cellScale,
-      from = 2,
-      to = 5
+      from = 1,
+      to = 4
     }
   )
   
   idleFallAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 5,
+      to = 5
+    }
+  )
+  
+  idleJumpAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -39,7 +51,7 @@ player.load = function()
     }
   )
   
-  idleJumpAnimation = newAnimation( 
+  moveJumpRightAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -50,7 +62,7 @@ player.load = function()
     }
   )
   
-  moveJumpAnimation = newAnimation( 
+  moveFallRightAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
@@ -61,24 +73,46 @@ player.load = function()
     }
   )
   
-  moveFallAnimation = newAnimation( 
+  moveJumpLeftAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellLeftScale,
+      from = 7,
+      to = 7
+    }
+  )
+  
+  moveFallLeftAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellLeftScale,
+      from = 8,
+      to = 8
+    }
+  )
+  
+  moveRightAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    {
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
       cellScale = cellScale,
       from = 9,
-      to = 9
+      to = 14
     }
   )
   
-  moveAnimation = newAnimation( 
+  moveLeftAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
       cellWidth = cellWidth,
       cellSwapTime = cellSwapTime,
-      cellScale = cellScale,
-      from = 10,
+      cellScale = cellLeftScale,
+      from = 9,
       to = 15
     }
   )
@@ -157,11 +191,9 @@ player.handleMovement = function( playerInstance, axisX )
   if math.abs( axisX ) > 0.1 then
     local x, y = playerInstance.body:getLinearVelocity()
     playerInstance.body:setLinearVelocity( axisX * playerInstance.speed.x, y )
-    playerInstance.currentAnimation = moveAnimation
   else
     local x, y = playerInstance.body:getLinearVelocity()
     playerInstance.body:setLinearVelocity( 0, y )
-    playerInstance.currentAnimation = idleAnimation
   end
 end
 
@@ -221,6 +253,26 @@ player.update = function(dt)
     
     if playerInstance.attachedBody ~= nil then
       playerInstance.attachedBody:setPosition( playerInstance.body:getX() + playerInstance.forward * 10, playerInstance.body:getY(), 0 )
+    end
+    
+    if playerInstance.forward == 1 and vy > 0.01 then
+      playerInstance.currentAnimation = moveJumpRightAnimation
+    elseif playerInstance.forward == -1 and vy > 0.01 then
+      playerInstance.currentAnimation = moveJumpLeftAnimation
+    elseif playerInstance.forward == 1 and vy < -0.01 then
+      playerInstance.currentAnimation = moveFallRightAnimation
+    elseif playerInstance.forward == -1 and vy < -0.01 then
+      playerInstance.currentAnimation = moveFallLeftAnimation
+    elseif playerInstance.forward == 1 and math.abs( vy) < 0.01 then
+      playerInstance.currentAnimation = moveRightAnimation
+    elseif playerInstance.forward == -1 and math.abs( vy ) < 0.01 then
+      playerInstance.currentAnimation = moveLeftAnimation
+    elseif playerInstance.forward == 0 and math.abs( vy ) < 0.01 then
+      playerInstance.currentAnimation = idleAnimation
+    elseif playerInstance.forward == 0 and vy < -0.01 then
+      playerInstance.currentAnimation = idleFallAnimation
+    elseif playerInstance.forward == 0 and vy > 0.01 then
+      playerInstance.currentAnimation = idleJumpAnimation
     end
     
     playerInstance.currentAnimation:update( dt )
