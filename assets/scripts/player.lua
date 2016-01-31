@@ -198,7 +198,7 @@ end
 
 player.handleJoystickPressed = function( joystick )
   for i, playerInstance in pairs(players) do
-    if playerInstance.joystick == joystick then
+    if playerInstance.joystick ~= joystick then
       if joystick:isGamepadDown('a') then
         player.handleJump( playerInstance )
       elseif joystick:isGamepadDown('b') then
