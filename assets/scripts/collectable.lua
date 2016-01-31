@@ -44,6 +44,10 @@ collectable.update = function(dt)
   end
 end
 
+dispSize = 45
+pt1 = { x = 50, y = 490}
+pt2 = { x = 976, y = 490}
+
 collectable.draw = function()
   for i, collectableInstance in pairs(collectables) do
     if not collectableInstance.body:isDestroyed() then
@@ -52,3 +56,9 @@ collectable.draw = function()
     end
   end
 end
+
+collectable.drawUI = function( colDispType1, colDispType2 )
+  love.graphics.draw( collectablesSprites, quads[ colDispType1 ], pt1.x - dispSize/2, pt1.y - dispSize/2, 0, dispSize/spriteSize, dispSize/spriteSize )
+  love.graphics.draw( collectablesSprites, quads[ colDispType2 ], pt2.x - dispSize/2, pt2.y - dispSize/2, 0, dispSize/spriteSize, dispSize/spriteSize )
+end
+

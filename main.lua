@@ -16,9 +16,10 @@ function love.load()
   collectable.load()
   monsters.load()
   musicManager:load()
+  ui:load()
   
-	player.newPlayer( { x = 100, y = 100 }, { x = 300, y = -500 }, 1 )
-	player.newPlayer( { x = 800, y = 100 }, { x = 300, y = -500 }, 2 )
+	player.newPlayer( { x = 100, y = 100 }, { x = 300, y = -500 }, 2 )
+	player.newPlayer( { x = 800, y = 100 }, { x = 300, y = -500 }, 1 )
 end
 
 function love.update( dt )
@@ -41,4 +42,5 @@ function love.draw()
   world:draw()
 	player.draw()
   collectable.draw()
+  ui.draw()
 end

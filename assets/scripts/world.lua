@@ -62,6 +62,7 @@ function world:load()
   function checkCollisions ( cauldron, other, contact )
     if other:getUserData().colliderType == "collectable" then
       remObj( other:getUserData().instance.object, world.objects )
+      ui.addNeutralCollectible( other:getUserData().instance.type )
       other:getBody():destroy()
     elseif other:getUserData().colliderType == "player" then
       local playerInstance = other:getUserData().instance

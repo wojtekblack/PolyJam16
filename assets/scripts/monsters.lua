@@ -40,12 +40,17 @@ end
 shockT1 = -1
 shockT2 = -1
 
+monsterBalance = 0
+cahcedBalance = 0
+
 function monsters.hit1()
-  shockT1 = 0.6
+  shockT2 = 0.6
+  cahcedBalance = cahcedBalance + 50
 end
 
 function monsters.hit2()
-  shockT2 = 0.6
+  shockT1 = 0.6
+  cahcedBalance = cahcedBalance - 50
 end
 
 timer = 0
@@ -53,11 +58,25 @@ shockScale = 25
 shockAmpX = 5
 shockAmpY = 5
 
+function monsters:endgame()
+  monsterBalance = 0;
+end
+
 function monsters:update(dt)
   timer = timer + dt;  
   
-  offset1.x = math.sin( timer ) * 20
-  offset2.x = math.sin( timer*0.76 ) * 20
+  monsterBalance = monsterBalance + cahcedBalance*dt*5
+  cahcedBalance = cahcedBalance * ( 1 - dt*5 )
+  
+  if monsterBalance > 310 then
+    endgame( 0 )
+  elseif monsterBalance < -310 then
+    endgame( 1 )
+  end
+    
+  
+  offset1.x = math.sin( timer ) * 20 + monsterBalance
+  offset2.x = math.sin( timer*0.76 ) * 20 + monsterBalance
   offset1.y = math.sin( timer*0.58 ) * 10
   offset2.y = math.sin( timer*0.8 ) * 10
   
