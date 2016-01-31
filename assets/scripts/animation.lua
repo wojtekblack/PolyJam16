@@ -8,6 +8,7 @@ function newAnimation( spriteSheetPath, animationData )
     currentCell = 0,
     cellQuads = {},
     cellWidth = animationData.cellWidth,
+    cellScale = animationData.cellScale,
     nCells = math.floor( spriteSheet:getWidth() / animationData.cellWidth ),
     cellSwapTime = animationData.cellSwapTime,
     lastTime = 0
@@ -20,7 +21,7 @@ function newAnimation( spriteSheetPath, animationData )
   end
   
   function animation:getCellDimensions()
-    return self.cellWidth, self.spriteSheet:getHeight()
+    return self.cellWidth * self.cellScale[1], self.spriteSheet:getHeight() * self.cellScale[2]
   end
   
   function animation:getNextCell()
@@ -32,7 +33,7 @@ function newAnimation( spriteSheetPath, animationData )
   end
   
   function animation:draw( position )
-    love.graphics.draw( self.spriteSheet, self.cellQuads[ self.currentCell ], position.x, position.y )
+    love.graphics.draw( self.spriteSheet, self.cellQuads[ self.currentCell ], position.x, position.y, 0, self.cellScale[1], self.cellScale[2] )
   end
   
   function animation:update( dt )

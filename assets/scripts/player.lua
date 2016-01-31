@@ -7,7 +7,8 @@ player.load = function()
     "assets/images/playerIdle.png",
     { 
       cellWidth = 16,
-      cellSwapTime = 0.15
+      cellSwapTime = 0.15,
+      cellScale = { 2, 2 }
     }
   )
   
