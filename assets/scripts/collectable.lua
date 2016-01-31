@@ -27,10 +27,11 @@ collectable.update = function(dt)
     }
     
     local collectablePhysics = {}
-    
+    local type = 4;
+    randomType = love.math.random( 4 )
     local instance = {
       body = love.physics.newBody( world.physicsWorld, position.x, position.y, "dynamic" ),
-      type = love.math.random( 4 )
+      type = randomType
     }
     
     collectablePhysics.body = instance.body
