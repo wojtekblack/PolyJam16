@@ -3,12 +3,83 @@ local players = {}
 player = {}
 
 player.load = function()
+  local cellScale = { 1.5, 1.5 }
+  local cellSwapTime = 0.15
+  local cellWidth = 16
+  hangAnimation = newAnimation(
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 1,
+      to = 1
+    }
+  )
+  
   idleAnimation = newAnimation( 
     "assets/images/playerIdle.png",
     { 
-      cellWidth = 16,
-      cellSwapTime = 0.15,
-      cellScale = { 1.5, 1.5 }
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 2,
+      to = 5
+    }
+  )
+  
+  idleFallAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 6,
+      to = 6
+    }
+  )
+  
+  idleJumpAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 7,
+      to = 7
+    }
+  )
+  
+  moveJumpAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 8,
+      to = 8
+    }
+  )
+  
+  moveFallAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 9,
+      to = 9
+    }
+  )
+  
+  moveAnimation = newAnimation( 
+    "assets/images/playerIdle.png",
+    { 
+      cellWidth = cellWidth,
+      cellSwapTime = cellSwapTime,
+      cellScale = cellScale,
+      from = 10,
+      to = 15
     }
   )
   
@@ -86,9 +157,11 @@ player.handleMovement = function( playerInstance, axisX )
   if math.abs( axisX ) > 0.1 then
     local x, y = playerInstance.body:getLinearVelocity()
     playerInstance.body:setLinearVelocity( axisX * playerInstance.speed.x, y )
+    playerInstance.currentAnimation = moveAnimation
   else
     local x, y = playerInstance.body:getLinearVelocity()
     playerInstance.body:setLinearVelocity( 0, y )
+    playerInstance.currentAnimation = idleAnimation
   end
 end
 

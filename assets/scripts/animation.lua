@@ -9,14 +9,15 @@ function newAnimation( spriteSheetPath, animationData )
     cellQuads = {},
     cellWidth = animationData.cellWidth,
     cellScale = animationData.cellScale,
-    nCells = math.floor( spriteSheet:getWidth() / animationData.cellWidth ),
+    cellFrom = animationData.from, 
+    cellTo = animationData.to,
     cellSwapTime = animationData.cellSwapTime,
     lastTime = 0
   }
   
-  for i = 0, animation.nCells - 1, 1 do
+  for i = 0, animationData.to - animationData.from, 1 do
     table.insert( animation.cellQuads, i, 
-      love.graphics.newQuad( i * animation.cellWidth, 0, animation.cellWidth, animation.spriteSheet:getHeight(), animation.spriteSheet:getDimensions() )
+      love.graphics.newQuad( ( i + animation.cellFrom ) * animation.cellWidth, 0, animation.cellWidth, animation.spriteSheet:getHeight(), animation.spriteSheet:getDimensions() )
     )
   end
   
@@ -25,7 +26,11 @@ function newAnimation( spriteSheetPath, animationData )
   end
   
   function animation:getNextCell()
-    if self.currentCell == self.nCells - 1 then
+    if self.cellTo - self.cellFrom == 0 then
+      return
+    end
+    
+    if self.currentCell == self.cellTo - self.cellFrom - 1 then
       self.currentCell = 0
     else
       self.currentCell = self.currentCell + 1
