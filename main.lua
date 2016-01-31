@@ -1,3 +1,5 @@
+--require('mobdebug').start()
+
 require "assets/scripts/world"
 require "assets/scripts/player"
 require "assets/scripts/collectable"
