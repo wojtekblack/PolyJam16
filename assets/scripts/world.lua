@@ -65,8 +65,9 @@ function world:load()
     elseif other:getUserData().colliderType == "player" then
       local playerInstance = other:getUserData().instance
       if playerInstance.attachedBody ~= nil then
-        ui.addCollectible( playerInstance.attachedBody:getFixtureList()[1]:getUserData().type, playerInstance.playerIndex )
-        remObj( playerInstance.attachedBody, world.objects )
+        local boxInstance = playerInstance.attachedBody:getFixtureList()[1]:getUserData()
+        ui.addCollectible( boxInstance.type, playerInstance.playerIndex )
+        remObj( playerInstance.attachedBody, world.objects )       
         playerInstance.attachedBody:destroy()
         playerInstance.attachedBody = nil
       end
