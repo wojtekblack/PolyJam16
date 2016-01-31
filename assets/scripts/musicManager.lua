@@ -6,19 +6,18 @@ musicManager = {
 
 function musicManager:load()
   local musicFiles = {
-    { "loopStart", "assets/sounds/Music/LoopStart.wav" },
-    { "cross", "assets/sounds/Music/Cross.wav" },
-    { "loopEnd", "assets/sounds/Music/LoopEnd.wav" },
-    { "choir", "assets/sounds/Music/Choir.wav" }
+    { "loopStart", "assets/sounds/LoopStart.wav" },
+    { "cross", "assets/sounds/Cross.wav" },
+    { "loopEnd", "assets/sounds/LoopEnd.wav" },
+    { "choir", "assets/sounds/Choir.wav" }
   }
   
   for _, nameFilePair in pairs(musicFiles) do
     local newSoundSource = love.audio.newSource( nameFilePair[2], "static" )
-    newSoundSource:setVolume( 1.0 )
     table.insert( self.musicSources, { nameFilePair[1], newSoundSource } )
   end
   
-  --self:requestPlay( "loopStart", true )
+  self:requestPlay( "loopStart", true )
 
 end
 
@@ -53,15 +52,13 @@ function musicManager:update( dt )
     self:playNext()
   end
   
-  if self.currentClip ~= nil then
-    local currentTime = love.timer.getTime()
-    local duration = self.currentClip:getDuration( "seconds" )
-    if currentTime - self.lastTime >= duration then
-      if #self.requestQueue ~= 0 then
-        self:playNext()
-      end
-      self.lastTime = currentTime
+  local currentTime = love.timer.getTime()
+  local duration = self.currentClip:getDuration( "seconds" )
+  if currentTime - self.lastTime >= duration then
+    if #self.requestQueue ~= 0 then
+      self:playNext()
     end
+    self.lastTime = currentTime
   end
 
 end

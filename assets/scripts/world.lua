@@ -2,12 +2,17 @@ require "assets/scripts/monsters"
 
 world = {}
 
+gcauldron = {}
+gcauldronSprite = {}
+
 function world:load()
   self.background = love.graphics.newImage( "assets/images/qqq.png" )
   self.bgWidth = self.background:getWidth()
   self.bgHeight = self.background:getHeight()
   
   self.bgFilter = love.graphics.newImage( "assets/images/qqq_mask.png" )
+  gcauldronSprite = love.graphics.newImage( "assets/images/Cauludron0000.png" )
+  
   
   love.physics.setMeter(64)
   local physicsWorld = love.physics.newWorld( 0, 9.81*128 )
@@ -20,7 +25,7 @@ function world:load()
     ground.body = love.physics.newBody( physicsWorld, love.graphics.getWidth() / 2, i * 420, "static" )
     ground.shape = love.physics.newRectangleShape( love.graphics.getWidth(), 10 )
     ground.fixture = love.physics.newFixture( ground.body, ground.shape, 1 )
-    table.insert( objects, ground )
+    --table.insert( objects, ground )
   end
   
   for i = 0,1 do
@@ -28,8 +33,8 @@ function world:load()
     wall.body = love.physics.newBody( physicsWorld, i * love.graphics.getWidth(), love.graphics.getHeight() / 2, "static" )
     wall.shape = love.physics.newRectangleShape( 10 , love.graphics.getHeight() )
     wall.fixture = love.physics.newFixture( wall.body, wall.shape, 1 )
-    wall.fixture:setFriction( 0 )
-    table.insert( objects, wall )
+    wall.fixture:setFriction( 100 )
+    --table.insert( objects, wall )
   end
   
   local platforms = {
@@ -45,7 +50,6 @@ function world:load()
     plaformCollider.body = love.physics.newBody( physicsWorld, platform.x, platform.y, "static" )
     plaformCollider.shape = love.physics.newRectangleShape( love.graphics.getWidth() / 5, love.graphics.getHeight() / 40 )
     plaformCollider.fixture = love.physics.newFixture( plaformCollider.body, plaformCollider.shape, 1 )
-    plaformCollider.fixture:setFriction( 0 )
     table.insert( objects, plaformCollider )
   end
   
@@ -55,7 +59,8 @@ function world:load()
   cauldron.fixture = love.physics.newFixture( cauldron.body, cauldron.shape, 1 )
   cauldron.fixture:setSensor( true )
   cauldron.fixture:setUserData( { colliderType = "cauldron", instance = nil } )
-  table.insert( objects, cauldron )
+  gcauldron = cauldron
+  --table.insert( objects, cauldron )
   
   world.objects = objects
 
@@ -108,6 +113,13 @@ function world:draw()
     end
   end
   love.graphics.setColor( r, g, b, a )
+  
+  cauldronWidth = 70
+  cauldronHeight = cauldronWidth
+  CspriteSize1 = gcauldronSprite:getHeight()
+  CspriteSize2 = gcauldronSprite:getWidth()
+  
+  love.graphics.draw( gcauldronSprite, gcauldron.body:getX() - cauldronWidth/2 , gcauldron.body:getY() - cauldronHeight /2 + 10 , 0, cauldronWidth/CspriteSize2, cauldronHeight/CspriteSize1 )
 end
 
 function world:update(dt)
