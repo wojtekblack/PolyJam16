@@ -3,6 +3,38 @@ local players = {}
 player = {}
 
 player.load = function()
+  -- sfx initialization
+  jumpSounds = {}
+  for i = 1, 3, 1 do
+    local jumpSound = love.audio.newSource( "assets/sounds/FX/Jump" .. i .. ".wav", "static" )
+    table.insert( jumpSounds, jumpSound )
+  end
+  
+  landingSounds = {}
+  for i = 1, 2, 1 do
+    local landingSound = love.audio.newSource( "assets/sounds/FX/Landing" .. i .. ".wav", "static" )
+    table.insert( landingSounds, landingSound )
+  end
+  
+  pickupSounds = {}
+  for i = 1, 5, 1 do
+    local pickupSound = love.audio.newSource( "assets/sounds/FX/Pickup" .. i .. ".wav", "static" )
+    table.insert( pickupSounds, pickupSound )
+  end
+  
+  tauntSounds = {}
+  for i = 1, 11, 1 do
+    local tauntSound = love.audio.newSource( "assets/sounds/FX/Taunt" .. i .. ".wav", "static" )
+    table.insert( tauntSounds, tauntSound )
+  end
+
+  stepSounds = {}
+  for i = 1, 6, 1 do
+    local stepSound = love.audio.newSource( "assets/sounds/FX/Step" .. i .. ".wav", "static" )
+    table.insert( stepSounds, stepSound )
+  end
+
+  -- animation initialization
   local cellScale = { 1.5, 1.5 }
   local cellLeftScale = { -1.5, 1.5 }
   local cellSwapTime = 0.15

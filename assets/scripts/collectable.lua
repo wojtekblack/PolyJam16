@@ -2,7 +2,7 @@ collectables = {}
 collectablesSprites = {}
 
 collectable = {}
-collectable.spawnInterval = 2.0
+collectable.spawnInterval = 5.0
 quads = {}
 width = 25
 height = width

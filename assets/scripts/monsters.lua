@@ -23,6 +23,13 @@ function monsters:load()
   monster2Img = love.graphics.newImage( "assets/images/qqq_mo2.png" )
   handsFrontImg = love.graphics.newImage( "assets/images/qqq_ml1.png" )
   handsBackImg = love.graphics.newImage( "assets/images/qqq_ml2.png" )
+  
+  monsterSounds = {}
+  for i = 1, 2, 1 do
+    local monsterSound = love.audio.newSource( "assets/sounds/FX/Growl" .. i .. ".wav", "static" )
+    table.insert( monsterSounds, monsterSound )
+  end
+  
 end
 
 function monsters:draw()
@@ -46,11 +53,13 @@ cahcedBalance = 0
 function monsters.hit1()
   shockT2 = 0.6
   cahcedBalance = cahcedBalance + 50
+  love.audio.play( monsterSounds[ love.math.random( 1, #monsterSounds ) ] )
 end
 
 function monsters.hit2()
   shockT1 = 0.6
   cahcedBalance = cahcedBalance - 50
+  love.audio.play( monsterSounds[ love.math.random( 1, #monsterSounds ) ] )
 end
 
 timer = 0
@@ -58,7 +67,7 @@ shockScale = 25
 shockAmpX = 5
 shockAmpY = 5
 
-function monsters:endgame()
+function monsters:endgame( winerIndex )
   monsterBalance = 0;
 end
 
@@ -69,9 +78,14 @@ function monsters:update(dt)
   cahcedBalance = cahcedBalance * ( 1 - dt*5 )
   
   if monsterBalance > 310 then
-    endgame( 0 )
+    monsters:endgame( 0 )
   elseif monsterBalance < -310 then
-    endgame( 1 )
+    monsters:endgame( 1 )
+  end
+  
+  if monsterBalance > 250 or monsterBalance < -250 then
+    musicManager:requestPlay( "cross", false )
+    musicManager:requestPlay( "loopEnd", false )
   end
     
   
